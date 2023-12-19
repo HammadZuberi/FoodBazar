@@ -13,7 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontEnd", "FrontEnd", "{0F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoodBazar.Services.CouponApi", "FoodBazar.Services.CouponApi\FoodBazar.Services.CouponApi.csproj", "{5589428A-BC1F-41E8-9A3F-6312DB4B8B0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodBazar.Web", "FoodBazar.Web\FoodBazar.Web.csproj", "{61CF7A98-7BFA-466B-9E38-E9755B234444}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoodBazar.Web", "FoodBazar.Web\FoodBazar.Web.csproj", "{61CF7A98-7BFA-466B-9E38-E9755B234444}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodBazar.Services.AuthApi", "FoodBazar.Services.AuthApi\FoodBazar.Services.AuthApi.csproj", "{906A37AB-881B-48E9-872D-BC632A73EA81}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{61CF7A98-7BFA-466B-9E38-E9755B234444}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61CF7A98-7BFA-466B-9E38-E9755B234444}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61CF7A98-7BFA-466B-9E38-E9755B234444}.Release|Any CPU.Build.0 = Release|Any CPU
+		{906A37AB-881B-48E9-872D-BC632A73EA81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{906A37AB-881B-48E9-872D-BC632A73EA81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{906A37AB-881B-48E9-872D-BC632A73EA81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{906A37AB-881B-48E9-872D-BC632A73EA81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -36,6 +42,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{5589428A-BC1F-41E8-9A3F-6312DB4B8B0B} = {9468A39C-C5F8-4A2B-8FDE-4F257C9952C8}
 		{61CF7A98-7BFA-466B-9E38-E9755B234444} = {0F06E1CE-DE4C-4FB5-9F08-D1D53C2A07C1}
+		{906A37AB-881B-48E9-872D-BC632A73EA81} = {9468A39C-C5F8-4A2B-8FDE-4F257C9952C8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AE41E89D-0554-4B8A-8C9F-D80D458D0B91}

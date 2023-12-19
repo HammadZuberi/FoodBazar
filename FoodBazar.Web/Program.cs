@@ -1,7 +1,19 @@
+using FoodBazar.Web.Services;
+using FoodBazar.Web.Services.IServices;
+using FoodBazar.Web.Utilities;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient();
+builder.Services.AddHttpClient<ICouponService, CouponService>();
+SD.CouponApiUri = builder.Configuration["ServiceUrls:CouponApi"];
+
+builder.Services.AddScoped<ICouponService, CouponService>();
+builder.Services.AddScoped<IBaseService,BaseService>();
+
 
 var app = builder.Build();
 

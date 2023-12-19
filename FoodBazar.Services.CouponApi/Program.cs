@@ -1,6 +1,8 @@
 using AutoMapper;
 using FoodBazar.Services.CouponApi;
 using FoodBazar.Services.CouponApi.Data;
+
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,7 +34,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();//before auth
 app.UseAuthorization();
 DBMigrations();
 app.MapControllers();
