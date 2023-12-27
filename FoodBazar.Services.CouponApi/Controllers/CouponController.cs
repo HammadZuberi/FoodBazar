@@ -2,6 +2,7 @@
 using FoodBazar.Services.CouponApi.Data;
 using FoodBazar.Services.CouponApi.Model;
 using FoodBazar.Services.CouponApi.Model.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace FoodBazar.Services.CouponApi.Controllers
 {
 	[Route("api/coupon")]
+	[Authorize]
 	[ApiController]
 	public class CouponController : ControllerBase
 	{
@@ -96,7 +98,7 @@ namespace FoodBazar.Services.CouponApi.Controllers
 
 
 		[HttpPost]
-
+		[Authorize(Roles ="ADMIN")]
 		public async Task<ResponseDto> Post([FromBody] CouponDto couponentry)
 		{
 
@@ -123,7 +125,7 @@ namespace FoodBazar.Services.CouponApi.Controllers
 
 
 		[HttpPut]
-
+		[Authorize(Roles = "ADMIN")]
 		public ResponseDto Put([FromBody] CouponDto couponentry)
 		{
 
@@ -149,7 +151,7 @@ namespace FoodBazar.Services.CouponApi.Controllers
 
 		[HttpDelete]
 		[Route("{id:int}")]
-
+		[Authorize(Roles = "ADMIN")]
 		public async Task<ResponseDto> Delete(int id)
 		{
 
