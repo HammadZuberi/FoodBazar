@@ -1,4 +1,4 @@
-﻿namespace FoodBazar.Web.Models
+﻿namespace FoodBazar.Services.ShoppingCartApi.Model.Dto
 {
     public class CouponDto
     {

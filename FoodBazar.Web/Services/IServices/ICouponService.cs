@@ -1,5 +1,4 @@
-﻿using FoodBazar.Web.Model;
-using FoodBazar.Web.Models;
+﻿using FoodBazar.Web.Models;
 
 namespace FoodBazar.Web.Services.IServices
 {

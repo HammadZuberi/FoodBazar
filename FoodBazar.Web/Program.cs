@@ -1,3 +1,4 @@
+using FoodBazar.Services.Web.Services.IServices;
 using FoodBazar.Web.Services;
 using FoodBazar.Web.Services.IServices;
 using FoodBazar.Web.Utilities;
@@ -9,14 +10,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
+
 builder.Services.AddHttpClient<ICouponService, CouponService>();
 builder.Services.AddHttpClient<IAuthService, AuthService>();
+builder.Services.AddHttpClient<IProductService, ProductService>();
+
 SD.CouponApiUri = builder.Configuration["ServiceUrls:CouponApi"];
 SD.AuthApiUri = builder.Configuration["ServiceUrls:AuthApi"];
+SD.ProductApiUri = builder.Configuration["ServiceUrls:ProductApi"];
 
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 //add authentication thorugh cookie

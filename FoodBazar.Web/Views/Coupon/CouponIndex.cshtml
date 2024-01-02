@@ -1,4 +1,4 @@
-﻿@using FoodBazar.Web.Model
+﻿@using FoodBazar.Web.Models
 @model IEnumerable<CouponDto>
 <div class="card shadow border-0 mt-4">
 	<div class="card-header bg-secondary bg-gradient ml-0 py-3">
@@ -45,7 +45,7 @@
 							@(item.DiscountAmount.ToString("c"))
 						</td>
 						<td>
-							@(item.MinAmount .ToString("c"))
+							@(item.MinAmount.ToString("c"))
 						</td>
 						<td>
 							<a class="btn btn-danger" asp-action="DeleteCoupon" asp-route-couponId="@item.CouponId" onclick="return confirm('Are you sure you want to delete this entry?')">

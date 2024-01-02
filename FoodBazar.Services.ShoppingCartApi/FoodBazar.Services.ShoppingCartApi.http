@@ -1,0 +1,6 @@
+@FoodBazar.Services.ShoppingCartApi_HostAddress = http://localhost:5192
+
+GET {{FoodBazar.Services.ShoppingCartApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

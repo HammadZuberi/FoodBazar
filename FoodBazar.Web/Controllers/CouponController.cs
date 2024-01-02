@@ -1,5 +1,4 @@
-﻿using FoodBazar.Web.Model;
-using FoodBazar.Web.Models;
+﻿using FoodBazar.Web.Models;
 using FoodBazar.Web.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -7,7 +6,7 @@ using System.Collections.Generic;
 
 namespace FoodBazar.Web.Controllers
 {
-	public class CouponController : Controller
+    public class CouponController : Controller
 	{
 		private readonly ICouponService _couponService;
 		public CouponController(ICouponService couponService)
