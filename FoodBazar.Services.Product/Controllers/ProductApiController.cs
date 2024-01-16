@@ -11,12 +11,12 @@ using Microsoft.EntityFrameworkCore;
 namespace FoodBazar.Services.Product.Controllers
 {
 	[Route("api/product")]
-	[Authorize]
+	//[Authorize]
 	[ApiController]
 	public class ProductApiController : ControllerBase
 	{
 		private ResponseDto _response;
-		private readonly IProductService _service;
+		private  IProductService _service;
 
 		public ProductApiController(IProductService service)
 		{
@@ -25,7 +25,8 @@ namespace FoodBazar.Services.Product.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ResponseDto> Get()
+        //[AllowAnonymous]
+        public async Task<ResponseDto> Get()
 		{
 
 			_response = await _service.GetAllProducts();

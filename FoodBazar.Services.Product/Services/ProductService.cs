@@ -28,7 +28,7 @@ namespace FoodBazar.Services.Product.Services
 		public async Task<ResponseDto> GetAllProducts()
 		{
 			IEnumerable<Products> products = await _db.Products.ToListAsync();
-			_response.Result = _mapper.Map<ProductDto>(products);
+			_response.Result = _mapper.Map<IEnumerable<ProductDto>>(products);
 
 			return _response;
 		}

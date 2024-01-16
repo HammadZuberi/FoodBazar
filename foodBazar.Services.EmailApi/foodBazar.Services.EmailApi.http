@@ -1,0 +1,6 @@
+@foodBazar.Services.EmailApi_HostAddress = http://localhost:5003
+
+GET {{foodBazar.Services.EmailApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

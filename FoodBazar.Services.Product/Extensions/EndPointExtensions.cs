@@ -10,6 +10,7 @@ namespace FoodBazar.Services.Product.Extensions
 
         public static WebApplicationBuilder AddSwaggerwithAuth(this WebApplicationBuilder builder)
         {
+
             //Auto Mapper Config
             IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
             builder.Services.AddSingleton(mapper);

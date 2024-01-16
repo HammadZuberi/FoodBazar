@@ -39,6 +39,12 @@
 								<li><a class="dropdown-item" href="#">Separated link</a></li>
 							</ul>
 						</li>
+
+						<li class="nav-item">
+							<a class="nav-link " asp-area="" asp-controller="Cart" asp-action="CartIndex">
+								&nbsp;		<i class="bi bi-cart"></i>&nbsp;
+							</a>
+						</li>
 					</ul>
 					<ul class="navbar-nav">
 						@if (!User.Identity.IsAuthenticated)
@@ -55,7 +61,7 @@
 						else
 						{
 							<li class="nav-item">
-								<a class="nav-link "href="#">Hello, @User.Identity.Name.ToString() </a>
+								<a class="nav-link " href="#">Hello, @User.Identity.Name.ToString() </a>
 							</li>
 
 							<li class="nav-item">

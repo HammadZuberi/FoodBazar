@@ -1,9 +1,12 @@
 using FoodBazar.Services.Web.Services.IServices;
 using FoodBazar.Web.Models;
+using FoodBazar.Web.Services.IServices;
+using IdentityModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace FoodBazar.Web.Controllers
 {
@@ -11,9 +14,11 @@ namespace FoodBazar.Web.Controllers
 	{
 		private readonly ILogger<HomeController> _logger;
 		private readonly IProductService _productService;
-		public HomeController(ILogger<HomeController> logger, IProductService product)
+		private ICartService _cartService;
+		public HomeController(ILogger<HomeController> logger, IProductService product, ICartService cartService)
 		{
 			_logger = logger;
+			_cartService = cartService;
 			_productService = product;
 
 		}
@@ -37,7 +42,7 @@ namespace FoodBazar.Web.Controllers
 		}
 
 		[Authorize]
-		public async Task<IActionResult> ProductDetails(int productId)
+		public async Task<IActionResult> ProductDetail(int productId)
 		{
 
 			ProductDto? list = new();
@@ -52,6 +57,46 @@ namespace FoodBazar.Web.Controllers
 				TempData["error"] = response?.Message;
 			}
 			return View(list);
+			//return View();
+		}
+
+		[HttpPost]
+		[Authorize]
+		[ActionName("ProductDetail")]
+		public async Task<IActionResult> ProductDetails(ProductDto productDto)
+		{
+
+			CartDto cartDto = new CartDto()
+			{
+				CartHeader = new CartHeaderDto()
+				{
+					UserId = User.Claims.Where(u => u.Type == JwtClaimTypes.Subject)?.FirstOrDefault()?.Value
+				}
+			};
+
+			CartDetailsDto cartDetail = new CartDetailsDto()
+			{
+				ProductId = productDto.ProductId,
+				Count = productDto.Count,
+			};
+
+			List<CartDetailsDto> cartDetailsDtos = new() { cartDetail };
+			cartDto.CartDetails = cartDetailsDtos;
+
+			ResponseDto response = await _cartService.UpsertCartAsync(cartDto);
+			if (response != null && response.IsSuccess)
+			{
+				//list = JsonConvert.DeserializeObject<ProductDto>(Convert.ToString(response.Result));
+
+				TempData["Success"] = "Item has been successfully added to the Cart";
+				return RedirectToAction(nameof(Index));
+
+			}
+			else
+			{
+				TempData["error"] = response?.Message;
+			}
+			return View(productDto);
 			//return View();
 		}
 		public IActionResult Privacy()

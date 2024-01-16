@@ -71,6 +71,7 @@ namespace FoodBazar.Services.CouponApi.Controllers
 
 		[HttpGet]
 		[Route("GetCode/{code}")]
+		[AllowAnonymous]
 		public async Task<ResponseDto> GetCode(string code)
 		{
 

@@ -1,4 +1,5 @@
-﻿using FoodBazar.Services.AuthApi.Data;
+﻿using AutoMapper;
+using FoodBazar.Services.AuthApi.Data;
 using FoodBazar.Services.AuthApi.Models;
 using FoodBazar.Services.AuthApi.Models.Dto;
 using FoodBazar.Services.AuthApi.Services.IService;
@@ -44,6 +45,35 @@ namespace FoodBazar.Services.AuthApi.Services
 			return false;
 
 		}
+
+		public async Task<bool> ResetPassword(string email, string newPassword)
+		{
+
+			//var user = await UserManager.FindByIdAsync(id);
+
+			//var token = await UserManager.GeneratePasswordResetTokenAsync(user);
+
+			//var result = await UserManager.ResetPasswordAsync(user, token, "MyN3wP@ssw0rd");
+			var user = _appDb.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
+			if (user != null)
+			{
+
+				var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+				var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+
+
+				if (result.Succeeded)
+				{
+					return true;
+				}
+				return false;
+			}
+			return false;
+
+		}
+
+
 
 		public async Task<LoginResponseDto> Login(LoginRequestDto loginRequest)
 		{

@@ -8,5 +8,7 @@ namespace FoodBazar.Services.AuthApi.Services.IService
 		public Task<string> Register(RegistrationRequestDto registerRequestDto);
 
 		public Task<bool> AssignRole(string email, string roleName);
+
+		public  Task<bool> ResetPassword(string email, string newPassword);
 	}
 }

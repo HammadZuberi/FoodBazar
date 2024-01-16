@@ -40,7 +40,7 @@ namespace FoodBazar.Services.AuthApi.Controllers
 		{
 			var loginResponse = await _authService.Login(loginRequest);
 
-			if (loginResponse == null)
+			if (loginResponse == null || loginResponse.User == null)
 			{
 				_responseDto.Message = "The UserName and Password is Incorrect";
 				_responseDto.IsSuccess = false;
@@ -51,6 +51,25 @@ namespace FoodBazar.Services.AuthApi.Controllers
 			return Ok(_responseDto);
 
 		}
+
+
+		[HttpPost("ResetPassword")]
+		public async Task<IActionResult> ResetPassword([FromBody] LoginRequestDto loginRequest)
+		{
+			var loginResponse = await _authService.ResetPassword(loginRequest.UserName,loginRequest.Password);
+			
+			if (loginResponse == false)
+			{
+				_responseDto.Message = "The UserName and Password can not reset";
+				_responseDto.IsSuccess = false;
+				return BadRequest(_responseDto);
+
+			}
+			_responseDto.Result = loginResponse;
+			return Ok(_responseDto);
+
+		}
+
 
 
 
@@ -69,5 +88,10 @@ namespace FoodBazar.Services.AuthApi.Controllers
 			return Ok(_responseDto);
 
 		}
+
+
+
+
+		
 	}
 }
