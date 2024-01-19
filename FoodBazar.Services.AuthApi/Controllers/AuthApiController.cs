@@ -1,4 +1,5 @@
-﻿using FoodBazar.Services.AuthApi.Models.Dto;
+﻿using foodBazar.MessageBus;
+using FoodBazar.Services.AuthApi.Models.Dto;
 using FoodBazar.Services.AuthApi.Services.IService;
 using FoodBazar.Services.CouponApi.Model.Dto;
 using Microsoft.AspNetCore.Http;
@@ -13,11 +14,14 @@ namespace FoodBazar.Services.AuthApi.Controllers
 	{
 		public readonly IAuthService _authService;
 		protected ResponseDto _responseDto;
-		public AuthApiController(IAuthService authService)
+		private IMessageBus _messageBus;
+		private IConfiguration _config;
+		public AuthApiController(IAuthService authService , IMessageBus messageBus, IConfiguration config)
 		{
 			this._authService = authService;
 			_responseDto = new();
-
+			_messageBus = messageBus;
+			_config = config;
 		}
 
 		[HttpPost("register")]
@@ -31,6 +35,10 @@ namespace FoodBazar.Services.AuthApi.Controllers
 				return BadRequest(_responseDto);
 
 			}
+
+			await _messageBus.PublishMessage(_config.GetValue<string>(
+				"topicandQueueNames:EmailRegistration"), registration.Email);
+
 			return Ok(_responseDto);
 		}
 
@@ -89,9 +97,28 @@ namespace FoodBazar.Services.AuthApi.Controllers
 
 		}
 
+		//[HttpPost("EmailUserRegister")]
+		//public async Task<object> EmailUserRegister([FromBody] RegistrationRequestDto registration)
+		//{
+		//	try
+		//	{
+
+		//		_responseDto.Result = true;
+		//	}
+		//	catch (Exception ex)
+		//	{
+
+		//		_responseDto.Message = ex.Message.ToString();
+		//		_responseDto.IsSuccess = false;
+		//	}
+
+		//	return _responseDto;
+
+		//}
 
 
 
-		
+
+
 	}
 }

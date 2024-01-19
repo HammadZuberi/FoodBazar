@@ -26,6 +26,8 @@ namespace FoodBazar.Web.Services
 			});
 		}
 
+		
+
 		public async Task<ResponseDto?> LoginAsync(LoginRequestDto requestDto)
 		{
 			return await _baseService.SendAsync(new RequestDto()
@@ -47,5 +49,17 @@ namespace FoodBazar.Web.Services
 
 			}, withBeaer: false);
 		}
+
+
+		//public async Task<ResponseDto?> EmailUserRegister(RegistrationRequestDto requestDto)
+		//{
+		//	return await _baseService.SendAsync(new RequestDto()
+		//	{
+		//		ApiType = SD.ApiType.POST,
+		//		Data = requestDto,
+		//		Url = SD.AuthApiUri + "/api/auth/EmailUserRegister"
+
+		//	}, withBeaer: false);
+		//}
 	}
 }

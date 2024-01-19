@@ -95,6 +95,7 @@ namespace FoodBazar.Web.Controllers
 				if (assignRole != null && assignRole.IsSuccess)
 				{
 					TempData["success"] = "Registration Successful";
+					//await _authService.EmailUserRegister(model);
 					return RedirectToAction(nameof(Login));
 				}
 				else

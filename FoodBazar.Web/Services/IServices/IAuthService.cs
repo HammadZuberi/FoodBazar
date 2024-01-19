@@ -9,5 +9,6 @@ namespace FoodBazar.Web.Services.IServices
 		public Task<ResponseDto?> LoginAsync(LoginRequestDto requestDto);	 
 		public Task<ResponseDto?> AssignRoleAsync(RegistrationRequestDto requestDto);	 
 		public Task<ResponseDto?> RegisterAsync(RegistrationRequestDto requestDto);	 
+		//public Task<ResponseDto?> EmailUserRegister(RegistrationRequestDto requestDto);	 
 	}
 }
