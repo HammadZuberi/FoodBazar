@@ -19,6 +19,11 @@ namespace FoodBazar.Web.Controllers
 		{
 			return View(await LoadCartBasedonUser());
 		}
+
+		public async Task<IActionResult> Checkout()
+		{
+			return View(await LoadCartBasedonUser());
+		}
 		[HttpPost]
 		public async Task<IActionResult> ApplyCoupon(CartDto cartDto)
 		{

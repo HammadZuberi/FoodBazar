@@ -7,9 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Cart\Checkout.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="IdentityModel" Version="6.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Cart\Checkout.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Cart\Checkout.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Cart\Checkout.cshtml" />
   </ItemGroup>
 
 </Project>
