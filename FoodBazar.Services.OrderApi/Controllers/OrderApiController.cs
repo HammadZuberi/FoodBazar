@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FoodBazar.Services.OrderApi.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("api/order")]
 	[ApiController]
 	[Authorize]
 	public class OrderApiController : ControllerBase
@@ -30,7 +30,7 @@ namespace FoodBazar.Services.OrderApi.Controllers
 
 		}
 
-		[HttpPost]
+		[HttpPost("CreateOrder")]
 		public async Task<ResponseDto> CreateOrder([FromBody]
 		CartDto cart)
 		{

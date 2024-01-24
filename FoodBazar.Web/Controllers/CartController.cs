@@ -2,18 +2,20 @@
 using FoodBazar.Web.Services.IServices;
 using FoodBazar.Web.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace FoodBazar.Web.Controllers
 {
 	public class CartController : Controller
 	{
-		private ICartService _service;
+		private readonly ICartService _service;
+		private readonly IOrderService _orderservice;
 
-		public CartController(ICartService service)
+		public CartController(ICartService service, IOrderService orderservice)
 		{
 			_service = service;
-
+			_orderservice = orderservice;
 		}
 		public async Task<IActionResult> CartIndex()
 		{
@@ -23,6 +25,38 @@ namespace FoodBazar.Web.Controllers
 		public async Task<IActionResult> Checkout()
 		{
 			return View(await LoadCartBasedonUser());
+		}
+		[HttpPost]
+		[ActionName("Checkout")]
+		public async Task<IActionResult> Checkout(CartDto cartDto)
+		{
+
+			CartDto cart = await LoadCartBasedonUser();
+			//other user related field from cart dto
+			cart.CartHeader.Phone = cartDto.CartHeader.Phone;
+			cart.CartHeader.Email = cartDto.CartHeader.Email;
+			cart.CartHeader.FirstName = cartDto.CartHeader.FirstName;
+
+			ResponseDto? response = await _orderservice.CreateOrder(cart);
+
+			if (response.IsSuccess && response != null)
+			{
+				TempData["success"] = "Order created successfully";
+
+				OrderHeaderDto orderHeader = UtilityHelper.DeserializeObject<OrderHeaderDto>(response.Result);
+				if (response.IsSuccess && response != null)
+				{
+					//get stripe session and redirect to place order
+
+				}
+				return View();
+			}
+			else
+			{
+
+				TempData["error"] = response.Message;
+			}
+			return View();
 		}
 		[HttpPost]
 		public async Task<IActionResult> ApplyCoupon(CartDto cartDto)
