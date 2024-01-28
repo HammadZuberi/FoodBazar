@@ -22,5 +22,25 @@ namespace FoodBazar.Web.Services
 				Url = SD.OrderApiUri + "/api/order/CreateOrder"
 			});
 		}
+
+		public async Task<ResponseDto?> CreateStripeSession(StripeRequestDto stripeRequest)
+		{
+			return await _baseService.SendAsync(new RequestDto()
+			{
+				ApiType = SD.ApiType.POST,
+				Data = stripeRequest,
+				Url = SD.OrderApiUri + "/api/order/CreateStripeSession"
+			});
+		}
+
+		public async Task<ResponseDto> ValidateStripeSession(int orderHeaderId)
+		{
+			return await _baseService.SendAsync(new RequestDto()
+			{
+				ApiType = SD.ApiType.POST,
+				Data = orderHeaderId,
+				Url = SD.OrderApiUri + "/api/order/ValidateStripeSession"
+			});
+		}
 	}
 }

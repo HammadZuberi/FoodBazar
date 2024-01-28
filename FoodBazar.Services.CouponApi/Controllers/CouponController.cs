@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+//using Stripe;
+//using Coupon = FoodBazar.Services.CouponApi.Model.Coupon;
 
 namespace FoodBazar.Services.CouponApi.Controllers
 {
@@ -99,18 +102,35 @@ namespace FoodBazar.Services.CouponApi.Controllers
 
 
 		[HttpPost]
-		[Authorize(Roles ="ADMIN")]
+		[Authorize(Roles = "ADMIN")]
 		public async Task<ResponseDto> Post([FromBody] CouponDto couponentry)
 		{
 
 			try
 			{
-				Coupon obj = _mapper.Map<Coupon>(couponentry);
+				Coupon couponDto = _mapper.Map<Coupon>(couponentry);
 
-				await _appDbContext.Coupons.AddAsync(obj);
+				await _appDbContext.Coupons.AddAsync(couponDto);
 
 				_appDbContext.SaveChanges();
-				_response.Result = _mapper.Map<CouponDto>(obj);
+
+
+
+				var options = new Stripe.CouponCreateOptions
+				{
+					//Duration = "repeating",
+					//DurationInMonths = 3,
+					//PercentOff
+					Name= couponDto.CouponCode,
+					Id=couponDto.CouponCode,
+					Currency="usd",
+					AmountOff = (long)(couponDto.DiscountAmount * 100),
+				};
+
+				var service = new Stripe.CouponService();
+				service.Create(options);
+
+				_response.Result = _mapper.Map<CouponDto>(couponDto);
 			}
 			catch (Exception ex)
 			{
@@ -158,10 +178,16 @@ namespace FoodBazar.Services.CouponApi.Controllers
 
 			try
 			{
+			
 				Coupon obj = await _appDbContext.Coupons.FirstAsync(u => u.CouponId == id);
 				_appDbContext.Coupons.Remove(obj);
 
 				_appDbContext.SaveChanges();
+
+
+				var service = new Stripe.CouponService();
+				service.Delete(obj.CouponCode);
+
 				_response.Result = _mapper.Map<CouponDto>(obj);
 			}
 			catch (Exception ex)

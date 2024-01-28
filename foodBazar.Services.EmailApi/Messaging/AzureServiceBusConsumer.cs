@@ -23,12 +23,12 @@ namespace foodBazar.Services.EmailApi.Messaging
 			emailCartQueue = _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCartQ");
 			RegisrtartionQueue = _configuration.GetValue<string>("TopicAndQueueNames:EmailRegistrationQ");
 
-			var client = new ServiceBusClient(ServiceBusConnStr);
+			//var client = new ServiceBusClient(ServiceBusConnStr);
 
-			//create processor to listen to Queue and Topics  for any new msg
-			_emailCartProcessor = client.CreateProcessor(emailCartQueue);
-			_emailregisterProcessor = client.CreateProcessor(RegisrtartionQueue);
-			_emailService = emailService;
+			////create processor to listen to Queue and Topics  for any new msg
+			//_emailCartProcessor = client.CreateProcessor(emailCartQueue);
+			//_emailregisterProcessor = client.CreateProcessor(RegisrtartionQueue);
+			//_emailService = emailService;
 
 		}
 

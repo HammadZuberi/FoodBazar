@@ -1,12 +1,15 @@
 ﻿using FoodBazar.Web.Models;
 using FoodBazar.Web.Services.IServices;
 using FoodBazar.Web.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq.Expressions;
 
 namespace FoodBazar.Web.Controllers
 {
+	//[Authorize]
 	public class CartController : Controller
 	{
 		private readonly ICartService _service;
@@ -17,46 +20,109 @@ namespace FoodBazar.Web.Controllers
 			_service = service;
 			_orderservice = orderservice;
 		}
+
+		[Authorize]
+		[HttpGet]
 		public async Task<IActionResult> CartIndex()
 		{
 			return View(await LoadCartBasedonUser());
 		}
 
+		[HttpGet]
+		[Authorize]
 		public async Task<IActionResult> Checkout()
 		{
-			return View(await LoadCartBasedonUser());
+			return View("Checkout", await LoadCartBasedonUser());
 		}
+
+
+		[HttpGet]
+		[Authorize]
+		public async Task<IActionResult> CheckoutAuth()
+		{
+			return View("Checkout", await LoadCartBasedonUser());
+		}
+
 		[HttpPost]
-		[ActionName("Checkout")]
+		[ActionName("CheckoutAuth")]
 		public async Task<IActionResult> Checkout(CartDto cartDto)
 		{
-
 			CartDto cart = await LoadCartBasedonUser();
-			//other user related field from cart dto
-			cart.CartHeader.Phone = cartDto.CartHeader.Phone;
-			cart.CartHeader.Email = cartDto.CartHeader.Email;
-			cart.CartHeader.FirstName = cartDto.CartHeader.FirstName;
+			try
+			{
+				//other user related field from cart dto
+				cart.CartHeader.Phone = cartDto.CartHeader.Phone;
+				cart.CartHeader.Email = cartDto.CartHeader.Email;
+				cart.CartHeader.FirstName = cartDto.CartHeader.FirstName;
 
-			ResponseDto? response = await _orderservice.CreateOrder(cart);
+				ResponseDto? response = await _orderservice.CreateOrder(cart);
+
+				if (response.IsSuccess && response != null)
+				{
+					TempData["success"] = "Order created successfully";
+
+					OrderHeaderDto orderHeader = UtilityHelper.DeserializeObject<OrderHeaderDto>(response.Result);
+					if (response.IsSuccess && response != null)
+					{
+						//get stripe session and redirect to place order
+						var domain = Request.Scheme + "://" + Request.Host.Value + "/";
+
+						StripeRequestDto stripeRequest = new()
+						{
+							ApprovedUrl = domain + "cart/Confirmation?orderId=" + orderHeader.OrderHeaderId,
+							CancelUrl = domain + "cart/Checkout",
+							orderHeader = orderHeader,
+
+						};
+
+						var stripeResponse = await _orderservice.CreateStripeSession(stripeRequest);
+
+						StripeRequestDto stripeResult = UtilityHelper
+							.DeserializeObject<StripeRequestDto>(stripeResponse.Result);
+
+						Response.Headers.Add("Location", stripeResult.StripeSessionUrl);
+
+						//redirection
+						return new StatusCodeResult(303);
+
+					}
+					return View("Checkout");
+				}
+				else
+				{
+
+					TempData["error"] = response.Message;
+				}
+			}
+			catch (Exception e)
+			{
+
+				TempData["error"] = e.StackTrace;
+			}
+			return View("Checkout");
+		}
+
+		[Authorize]
+		public async Task<IActionResult> Confirmation(int orderId)
+		{
+			//orderId when order genrate a process or service bus can process and confirm all the orders  in order api 
+
+			//validate 
+			ResponseDto? response = await _orderservice.ValidateStripeSession(orderId);
 
 			if (response.IsSuccess && response != null)
 			{
-				TempData["success"] = "Order created successfully";
-
-				OrderHeaderDto orderHeader = UtilityHelper.DeserializeObject<OrderHeaderDto>(response.Result);
-				if (response.IsSuccess && response != null)
+				OrderHeaderDto orderHeaderDto = UtilityHelper.DeserializeObject<OrderHeaderDto>(response.Result);
+				if (orderHeaderDto != null && orderHeaderDto.Status == SD.Status_Approved)
 				{
-					//get stripe session and redirect to place order
+					TempData["success"] = "Order confirmed";
+					return View(orderId);
 
 				}
-				return View();
 			}
-			else
-			{
+			//redirect ot erro or page based on status
+			return View(orderId);
 
-				TempData["error"] = response.Message;
-			}
-			return View();
 		}
 		[HttpPost]
 		public async Task<IActionResult> ApplyCoupon(CartDto cartDto)

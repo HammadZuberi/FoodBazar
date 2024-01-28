@@ -4,6 +4,7 @@ using FoodBazar.Services.OrderApi.Extensions;
 using FoodBazar.Services.OrderApi.Service;
 using FoodBazar.Services.OrderApi.Utilities;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.AddSwaggerwithAuth();
 
-builder.Services.AddScoped<IProductService, ProductService>();	
+builder.Services.AddScoped<IProductService, FoodBazar.Services.OrderApi.Service.ProductService>();
 builder.Services.AddScoped<IMessageBus,MessageBus>();
 
 builder.Services.AddHttpContextAccessor();
@@ -39,6 +40,8 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 	app.AddMigrations();
 }
+
+StripeConfiguration.ApiKey =builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

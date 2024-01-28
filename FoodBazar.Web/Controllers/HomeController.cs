@@ -41,7 +41,7 @@ namespace FoodBazar.Web.Controllers
 			//return View();
 		}
 
-		[Authorize]
+		//[Authorize]
 		public async Task<IActionResult> ProductDetail(int productId)
 		{
 
