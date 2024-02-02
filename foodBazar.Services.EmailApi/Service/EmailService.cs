@@ -46,6 +46,18 @@ namespace foodBazar.Services.EmailApi.Service
 			await LogandEmail(message.ToString(), email);
 		}
 
+		public async Task LogOrderPlaced(RewardsDto rewardsDto)
+		{
+			string email = "";
+			StringBuilder message = new StringBuilder();
+
+			message.AppendLine("</br> Order Confirmation");
+			message.AppendLine("<br/> Order Placed :" + rewardsDto.OrderId + "");
+			//message.AppendLine("<br/> with the Folowing Email" + email);
+
+			await LogandEmail(message.ToString(), email);
+		}
+
 		private async Task<bool> LogandEmail(string message, string email)
 		{
 			try

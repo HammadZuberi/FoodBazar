@@ -7,5 +7,6 @@ namespace foodBazar.Services.EmailApi.Service
 
 		Task EmailCartandLog(CartDto cart);
 		Task EmailUserRegistered(string email);
+		Task LogOrderPlaced(RewardsDto rewardsDto);
 	}
 }

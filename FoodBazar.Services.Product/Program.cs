@@ -1,5 +1,4 @@
 using AutoMapper;
-using FoodBazar.Services.CouponApi.Extensions;
 using FoodBazar.Services.Product;
 using FoodBazar.Services.Product.Data;
 using FoodBazar.Services.Product.Extensions;

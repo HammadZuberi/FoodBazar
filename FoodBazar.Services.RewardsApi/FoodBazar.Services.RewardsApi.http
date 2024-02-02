@@ -1,0 +1,6 @@
+@FoodBazar.Services.RewardsApi_HostAddress = http://localhost:5213
+
+GET {{FoodBazar.Services.RewardsApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

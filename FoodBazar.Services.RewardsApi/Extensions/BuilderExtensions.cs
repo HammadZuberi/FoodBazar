@@ -1,10 +1,11 @@
-﻿using FoodBazar.Services.Product.Data;
+﻿
+using FoodBazar.Services.RewardsApi.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace FoodBazar.Services.Product.Extensions
+namespace FoodBazar.Services.RewardsApi.Extensions
 {
 	public static class BuilderExtensions
 	{

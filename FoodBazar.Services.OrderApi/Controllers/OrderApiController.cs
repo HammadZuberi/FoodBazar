@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using foodBazar.MessageBus;
 using FoodBazar.Services.OrderApi.Data;
 using FoodBazar.Services.OrderApi.Models;
 using FoodBazar.Services.OrderApi.Models.Dto;
@@ -22,14 +23,18 @@ namespace FoodBazar.Services.OrderApi.Controllers
 		private IMapper _mapper;
 		private readonly AppDbContext _dbContext;
 		private IProductService _productService;
+		private readonly IConfiguration _configuration;
+		private readonly IMessageBus _messageBus;
 
 		public OrderApiController(AppDbContext dbContext, IMapper mapper
-			, IProductService productService)
+			, IProductService productService, IConfiguration configuration, IMessageBus messageBus)
 		{
 			_dbContext = dbContext;
 			_mapper = mapper;
 			_productService = productService;
 			_response = new ResponseDto();
+			_configuration = configuration;
+			_messageBus = messageBus;
 
 		}
 
@@ -160,13 +165,26 @@ namespace FoodBazar.Services.OrderApi.Controllers
 
 				if (paymentIntent.Status == "succeeded")
 				{
-				//if payment is sucessful
+					//if payment is sucessful
 					orderHeader.PaymentIntentId = paymentIntent.Id;
 					orderHeader.Status = SD.Status_Approved;
 					await _dbContext.SaveChangesAsync();
+
+					RewardsDto rewards = new RewardsDto()
+					{
+						OrderId = orderHeader.OrderHeaderId,
+						UserId = orderHeader.UserId,
+						//1$ equals to 1 rewards point
+						RewardsActivity = Convert.ToInt32(orderHeader.OrderTotal)
+					};
+					//sending to ime
+					string topicname = _configuration.GetValue<string>("topicandQueueNames:OrderCreatedTopic");
+
+					_messageBus.PublishMessage(topicname, rewards);
+
+					_response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
 				}
 
-				_response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
 			}
 			catch (Exception ex)
 			{
@@ -177,3 +195,4 @@ namespace FoodBazar.Services.OrderApi.Controllers
 		}
 
 	}
+}
