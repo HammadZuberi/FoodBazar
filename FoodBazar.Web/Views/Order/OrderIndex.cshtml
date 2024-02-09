@@ -1,0 +1,70 @@
+﻿@{
+	var status = Context.Request.Query["status"];
+
+	var approved = "";
+	var readyforpickup = "";
+	var cancelled = "";
+	var all = "";
+
+
+	switch (status)
+	{
+		case "approved":
+			approved = "active bg-secondary text-whtie"; break;
+		case "readyforpickup":
+			readyforpickup = "active bg-secondary text-whtie"; break;
+		case "cancelled":
+			cancelled = "active bg-secondary text-whtie"; break;
+		case "all":
+			all = "active bg-secondary text-whtie";
+			break;
+
+
+
+	}
+}
+
+
+<div class="card shadow border-0 mt-4">
+	<div class="card-header bg-secondary bg-gradient m-lg-0 py-3 d-flex justify-content-between">
+		<h1 class="text-white">Order List</h1>
+	</div>
+	<ul class="list-group list-group-horizontal-sm pt-2">
+		<a style="text-decoration:none" asp-controller="order" asp-action="OrderIndex" asp-route-status="approved">
+		<li class="list-group-item @approved">Approved </li>
+		</a>
+		<a style="text-decoration:none" asp-controller="order" asp-action="OrderIndex" asp-route-status="readyforpickup">
+		<li class="list-group-item @readyforpickup">Ready for pickup </li>
+		</a>
+		<a style="text-decoration:none" asp-controller="order" asp-action="OrderIndex" asp-route-status="cancelled">
+		<li class="list-group-item @cancelled">Cancelled </li>
+		</a>
+		<a style="text-decoration:none" asp-controller="order" asp-action="OrderIndex" asp-route-status="all">
+		<li class="list-group-item @all">All Status </li>
+		</a>
+
+
+	</ul>
+</div>
+
+<div class="card-body">
+	<table id="tblData" class="table table-bordered table-striped pt-3" style="width:100%">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Email</th>
+				<th>Name</th>
+				<th>Phone</th>
+				<th>Status</th>
+				<th>Total</th>
+				<th>Details</th>
+			</tr>
+		</thead>
+
+	</table>
+
+</div>
+@section Scripts {
+
+	<script src="~/js/order.js"></script>
+}

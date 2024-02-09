@@ -19,7 +19,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 });
 
-StripeConfiguration.ApiKey = builder.Configuration.GetConnectionString("Stripe:SecretKey");
 
 
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
@@ -67,6 +66,7 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 app.UseHttpsRedirection();
 app.UseAuthentication();//before auth
 app.UseAuthorization();

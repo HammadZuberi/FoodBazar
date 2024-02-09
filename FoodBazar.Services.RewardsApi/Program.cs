@@ -20,7 +20,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
 optionBuilder.UseSqlServer(SQLConnection);
-builderf.Services.AddSingleton(new RewardsService(optionBuilder.Options));
+builder.Services.AddSingleton(new RewardsService(optionBuilder.Options));
 
 
 builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();

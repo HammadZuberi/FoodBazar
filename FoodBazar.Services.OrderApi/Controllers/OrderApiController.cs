@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Stripe;
 using Stripe.Checkout;
+using Stripe.Issuing;
 
 namespace FoodBazar.Services.OrderApi.Controllers
 {
@@ -72,8 +73,71 @@ namespace FoodBazar.Services.OrderApi.Controllers
 
 		}
 
+		[Authorize]
+		[HttpGet("GetOrders")]
+		public async Task<ResponseDto> Get(string? UserId = "")
+		{
+			try
+			{
+
+				IEnumerable<OrderHeader> objList;
+				if (User.IsInRole(SD.Role_Admin))
+				{
+					objList = _dbContext.OrderHeader.Include(o => o.OrderDetails)
+						.OrderByDescending(o => o.OrderHeaderId).ToList();
+
+				}
+				else
+				{
+					objList = _dbContext.OrderHeader.Include(o => o.OrderDetails)
+						.Where(u => u.UserId == UserId)
+						.OrderByDescending(o => o.OrderHeaderId).ToList();
+
+				}
 
 
+				_response.Result = _mapper.Map<IEnumerable<OrderHeaderDto>>(objList);
+			}
+			catch (Exception ex)
+			{
+				_response.Message = ex.Message.ToString();
+				_response.IsSuccess = false;
+			}
+
+			return _response;
+
+		}
+
+
+
+		[Authorize]
+		[HttpGet("GetOrder/{id:int}")]
+		public async Task<ResponseDto> Get(int id)
+		{
+
+			try
+			{
+
+
+
+				OrderHeader orderHeader = await _dbContext.OrderHeader.Include(u => u.OrderDetails)
+					.FirstOrDefaultAsync(o => o.OrderHeaderId == id);
+
+
+
+				_response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
+
+
+			}
+			catch (Exception ex)
+			{
+				_response.Message = ex.Message.ToString();
+				_response.IsSuccess = false;
+			}
+
+			return _response;
+
+		}
 		[HttpPost("CreateStripeSession")]
 		public async Task<ResponseDto> CreateStripeSession([FromBody] StripeRequestDto stripeRequest)
 		{
@@ -194,5 +258,53 @@ namespace FoodBazar.Services.OrderApi.Controllers
 			return _response;
 		}
 
+
+
+		[Authorize]
+		[HttpPost("UpdateOrderStatus/{orderId:int}")]
+		public async Task<ResponseDto> UpdateOrderStatus(int orderId, [FromBody] string newStatus)
+		{
+
+			try
+			{
+
+
+
+				OrderHeader orderHeader = await _dbContext.OrderHeader.FirstAsync(o => o.OrderHeaderId == orderId);
+
+				if (orderHeader != null)
+				{
+
+					if (newStatus == SD.Status_Cancelled)
+					{
+						//we will provide refunds
+						var options = new RefundCreateOptions
+						{
+							Reason = RefundReasons.RequestedByCustomer,
+							PaymentIntent = orderHeader.PaymentIntentId
+						};
+
+						var serviceRefund = new RefundService();
+						Refund refund = await serviceRefund.CreateAsync(options);
+
+					}
+					orderHeader.Status = newStatus;
+					await _dbContext.SaveChangesAsync();
+				}
+
+
+				_response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
+
+
+			}
+			catch (Exception ex)
+			{
+				_response.Message = ex.Message.ToString();
+				_response.IsSuccess = false;
+			}
+
+			return _response;
+
+		}
 	}
 }
