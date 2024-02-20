@@ -1,8 +1,12 @@
-﻿namespace FoodBazar.Services.AuthApi.Models.Dto
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FoodBazar.Services.AuthApi.Models.Dto
 {
 	public class RegistrationRequestDto
 	{
+		[Required]
 		public string Name { get; set; }
+		[Required]
 		public string Email { get; set; }
 		public string PhoneNumber { get; set; }	
 		public string Password { get; set; }	

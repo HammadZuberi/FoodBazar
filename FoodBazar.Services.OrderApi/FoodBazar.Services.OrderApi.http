@@ -1,6 +1,0 @@
-@FoodBazar.Services.OrderApi_HostAddress = http://localhost:5139
-
-GET {{FoodBazar.Services.OrderApi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

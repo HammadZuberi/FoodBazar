@@ -28,7 +28,16 @@ namespace FoodBazar.Web.Services
 				HttpClient client = _httpClientFactory.CreateClient("FoodBazarAPI");
 
 				HttpRequestMessage message = new();
-				message.Headers.Add("Accept", "application/json");
+				if (requestDto.ContentType == SD.ContentType.MultipartFormData)
+				{//all mediatype and subtypes
+					message.Headers.Add("Accept", "*/*");
+
+				}
+				else
+				{
+
+					message.Headers.Add("Accept", "application/json");
+				}
 				//token
 				if (withBeaer)
 				{
@@ -38,11 +47,39 @@ namespace FoodBazar.Web.Services
 
 				message.RequestUri = new Uri(requestDto.Url);
 
-				if (requestDto.Data != null)
-				{ //for put and post 
+				//for File
 
-					message.Content = new StringContent(JsonConvert.SerializeObject(requestDto.Data), Encoding.UTF8, "application/json");
+				if (requestDto.ContentType == SD.ContentType.MultipartFormData)
+				{
+					var content = new MultipartFormDataContent();
+					foreach (var prop in requestDto.GetType().GetProperties())
+					{
+						var value = prop.GetValue(requestDto.Data);
+						if (value is FormFile)
+						{
+							var file = (FormFile)value;
+							if (file != null)
+
+								content.Add(new StreamContent(file.OpenReadStream()), prop.Name, file.FileName);
+						}
+						else
+						{
+							content.Add(new StringContent(value == null ? "" : value.ToString()), prop.Name);
+						}
+
+					}
+					//add everything to the message
+					message.Content = content;
 				}
+				else
+				{
+					if (requestDto.Data != null)
+					{ //for put and post 
+
+						message.Content = new StringContent(JsonConvert.SerializeObject(requestDto.Data), Encoding.UTF8, "application/json");
+					}
+				}
+
 
 				HttpResponseMessage? apiResponse = null;
 

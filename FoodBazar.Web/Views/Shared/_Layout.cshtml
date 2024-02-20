@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using FoodBazar.Web.Utilities
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
@@ -25,24 +26,24 @@
 						<li class="nav-item">
 							<a class="nav-link " asp-area="" asp-controller="Home" asp-action="Index">Home</a>
 						</li>
-						<li class="nav-item">
-							<a class="nav-link " asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-						</li>
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Dropdown</a>
-							<ul class="dropdown-menu">
-								<li><a class="dropdown-item" asp-action="CouponIndex" asp-controller="Coupon">Coupon </a></li>
+						@if (User.IsInRole(SD.RoleAdmin))
+						{
 
-								<li><a class="dropdown-item" asp-action="ProductIndex" asp-controller="Product">Product </a></li>
-								<li><a class="dropdown-item" href="#">Another action</a></li>
-								<li><a class="dropdown-item" href="#">Something else here</a></li>
-								<li><hr class="dropdown-divider"></li>
-								<li><a class="dropdown-item" href="#">Separated link</a></li>
-							</ul>
-						</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Content Management</a>
+								<ul class="dropdown-menu">
+									<li><a class="dropdown-item" asp-action="ProductIndex" asp-controller="Product">Product </a></li>
+									<li><a class="dropdown-item" asp-action="CouponIndex" asp-controller="Coupon">Coupon </a></li>
+									<li><a class="dropdown-item" href="#">Something else here</a></li>
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" href="#">Separated link</a></li>
+								</ul>
+							</li>
+
+						}
 						<li class="nav-item">
 							<a class="nav-link " asp-area="" asp-controller="Order" asp-action="OrderIndex">
-							Manage Order
+								Manage Order
 							</a>
 						</li>
 						<li class="nav-item">

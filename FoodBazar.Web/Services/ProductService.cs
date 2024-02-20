@@ -54,6 +54,7 @@ namespace FoodBazar.Web.Services
 				ApiType = Utilities.SD.ApiType.POST,
 				Url = SD.ProductApiUri + "/api/product",
 				Data = model,
+				ContentType= SD.ContentType.MultipartFormData
 
 			});
 		}
@@ -65,8 +66,9 @@ namespace FoodBazar.Web.Services
 			{
 				ApiType = Utilities.SD.ApiType.PUT,
 				Url = SD.ProductApiUri + "/api/product",
-				Data = model
-			});
+				Data = model,
+                ContentType = SD.ContentType.MultipartFormData
+            });
 		}
 
 		public async Task<ResponseDto?> DeleteProduct(int id)

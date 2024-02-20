@@ -1,6 +1,7 @@
 ﻿using FoodBazar.Web.Models;
 using FoodBazar.Web.Services.IServices;
 using FoodBazar.Web.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -17,12 +18,12 @@ namespace FoodBazar.Web.Controllers
 		{
 			_orderService = orderService;
 		}
-
+		[Authorize]
 		public IActionResult OrderIndex()
 		{
 			return View();
 		}
-
+		[Authorize]
 		public async Task<IActionResult> OrderDetail(int orderId)
 		{
 

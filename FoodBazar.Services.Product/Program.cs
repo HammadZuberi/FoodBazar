@@ -37,7 +37,7 @@ if (app.Environment.IsDevelopment())
     //external migration
     app.AddMigrations();
 }
-
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

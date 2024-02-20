@@ -84,8 +84,25 @@ namespace FoodBazar.Services.Product.Services
 				Products products = _mapper.Map<Products>(model);
 				await _db.Products.AddAsync(products);
 				_db.SaveChanges();
-				_response.Message = "Created Successfully";
 
+
+				if (model.Image != null)
+				{
+					string filepath, fileName = "";
+					(filepath, fileName) = StoreFile(model.Image, products.ProductId.ToString());
+					var baseurl = model.ImageLocalPath;
+					products.ImageLocalPath = filepath;
+					products.ImageUrl = baseurl + "/ProductImages/" + fileName;
+				}
+				else
+				{
+					products.ImageUrl = "https://placehold.co/600x400";
+				}
+
+				_db.Products.Update(products);
+				_db.SaveChanges();
+
+				_response.Message = "Created Successfully";
 				_response.Result = _mapper.Map<ProductDto>(products);
 
 
@@ -100,6 +117,32 @@ namespace FoodBazar.Services.Product.Services
 			return _response;
 		}
 
+		private (string, string) StoreFile(IFormFile? Image, string nameID)
+		{
+			string filename = nameID + Path.GetExtension(Image.FileName);
+			string filepath = @"wwwroot\ProductImages\" + filename;
+			var filePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), filepath);
+			using (var filestream = new FileStream(filePathDirectory, FileMode.Create))
+			{
+				Image.CopyTo(filestream);
+			}
+
+			return (filepath, filename);
+
+		}
+		private bool DeleteFile(string ImageLocalPath)
+		{
+			var oldfilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), ImageLocalPath);
+			FileInfo file = new FileInfo(oldfilePathDirectory);
+
+			if (file.Exists)
+			{
+				file.Delete();
+				return true;
+			}
+
+			return false;
+		}
 		public async Task<ResponseDto> DeleteProduct(int id)
 		{
 			try
@@ -111,6 +154,12 @@ namespace FoodBazar.Services.Product.Services
 				}
 				else
 				{
+
+					if (!string.IsNullOrEmpty(product.ImageLocalPath))
+					{
+						DeleteFile(product.ImageLocalPath);
+					}
+
 					_db.Products.Remove(product);
 					_db.SaveChanges();
 					_response.Message = "Deleted Successfully";
@@ -131,12 +180,30 @@ namespace FoodBazar.Services.Product.Services
 		{
 			try
 			{
-				Products obj = _mapper.Map<Products>(model);
+				Products product = _mapper.Map<Products>(model);
 
-				_db.Products.Update(obj);
+
+				if (model.Image != null)
+				{
+					if (!string.IsNullOrEmpty(product.ImageLocalPath))
+					{
+						DeleteFile(product.ImageLocalPath);
+					}
+
+					string filepath, fileName = "";
+					(filepath, fileName) = StoreFile(model.Image, product.ProductId.ToString());
+					var baseurl = model.ImageLocalPath;
+					product.ImageLocalPath = filepath;
+					product.ImageUrl = baseurl + "/ProductImages/" + fileName;
+				}
+
+				
+
+
+				_db.Products.Update(product);
 
 				_db.SaveChanges();
-				_response.Result = _mapper.Map<ProductDto>(obj);
+				_response.Result = _mapper.Map<ProductDto>(product);
 			}
 			catch (Exception ex)
 			{
