@@ -1,48 +1,57 @@
 ﻿@using FoodBazar.Services.Web.Models.Dto
 @model RegistrationRequestDto
+<div class="container">
+	<div class=" align-content-between align-content-center">
+		<h2 class="text-center mb-4">Registration Form</h2>
 
-<form method="post">
-
-	<div class="container p-4">
-		<div class="row text-center">
+		<form method="post" class="">
+			@*
+			<div class="container p-4">
+			<div class="row text-center">
 			<h1>Register</h1>
-		</div>
-	</div>
-	<div class="row text-center">
-		<div asp-validation-summary="All" class="text-danger"></div>
-	</div>
-	<div class="row">
-		<div class="col-12 col-md-6 offset--md-3 pb-2">
-			<input asp-for="Name" class="form-control" placeholder="User Name" />
-			<span asp-validation-for="Name" class="text-danger" />
-		</div>
-		<div class="col-12 col-md-6 offset--md-3 pb-2">
-			<input asp-for="Email" class="form-control" placeholder="Email" />
-			<span asp-validation-for="Email" class="text-danger" />
-		</div>
-		<div class="col-12 col-md-6 offset--md-3 pb-2">
-			<input asp-for="PhoneNumber" class="form-control" placeholder="PhoneNumber" />
-			<span asp-validation-for="PhoneNumber" class="text-danger" />
-		</div>
-		<div class="col-12 col-md-6 offset--md-3  pb-2">
-			<input asp-for="Password" class="form-control" placeholder="Password" />
-			<span asp-validation-for="Password" class="text-danger" />
-		</div>
-		 
-		<div class="col-12 col-md-6 offset--md-3  pb-2">
-			<select asp-for="Role" class="form-control" asp-items="@ViewBag.RoleList">
-				<option disabled selected>---Select Role---</option>
-			</select>
-			<span asp-validation-for="Role" class="text-danger" />
-		</div>
+			</div>
+			</div> *@
+			<div class="row text-center">
+				<div asp-validation-summary="All" class="text-danger"></div>
+			</div>
+			<div class=" col-12 col-md-6 offset--md-3 pb-2    form-group">
+				<label asp-for="Name"></label>
+				<input asp-for="Name" class="form-control" placeholder="User Name" />
+				<span asp-validation-for="Name" class="text-danger" />
+			</div>
+			<div class="col-12 col-md-6 offset--md-3 pb-2   form-group">
+				<label asp-for="Email"></label>
+				<input asp-for="Email" class="form-control" placeholder="Email" />
+				<span asp-validation-for="Email" class="text-danger" />
+			</div>
+			<div class="col-12 col-md-6 offset--md-3 pb-2   form-group">
+				<label asp-for="PhoneNumber"></label>
+				<input asp-for="PhoneNumber" class="form-control" placeholder="PhoneNumber" />
+				<span asp-validation-for="PhoneNumber" class="text-danger" />
+			</div>
+			<div class="col-12 col-md-6 offset--md-3 pb-2    form-group">
+				<label asp-for="Password"></label>
+				<input asp-for="Password" class="form-control" placeholder="Password" />
+				<span asp-validation-for="Password" class="text-danger" />
+			</div>
 
-		<div class="col-12 col-md-6 offset--md-3  pb-2">
-			<button type="submit" class="form-control btn btn-success" value="Submit">Register</button>
-		</div>
+			<div class="col-12 col-md-6 offset--md-3 pb-2   form-group">
+				<label asp-for="Role"></label>
+				<select asp-for="Role" class="form-control" asp-items="@ViewBag.RoleList">
+					<option disabled selected>---Select Role---</option>
+				</select>
+				<span asp-validation-for="Role" class="text-danger" />
+			</div>
 
+			<div class="col-12 col-md-6 offset--md-3  pb-2">
+				<button type="submit" class="form-control btn btn-success" value="Submit">Register</button>
+			</div>
+
+
+		</form>
 	</div>
-</form>
-@* 
+</div>
+@*
 	@section Scrpits{
 	<partial name="_ValidationScriptsPartial"></partial>
 	} *@

@@ -1,6 +1,8 @@
 using foodBazar.MessageBus;
 using FoodBazar.Services.AuthApi.Data;
 using FoodBazar.Services.AuthApi.Models;
+using FoodBazar.Services.AuthApi.RabbitMQSender;
+using FoodBazar.Services.AuthApi.RabittMQSender;
 using FoodBazar.Services.AuthApi.Services;
 using FoodBazar.Services.AuthApi.Services.IService;
 using Microsoft.AspNetCore.Identity;
@@ -27,7 +29,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFramework
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
 
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IMessageBus, MessageBus>();
+//builder.Services.AddScoped<IMessageBus, MessageBus>();
+builder.Services.AddScoped<IRabbitMQAuthMessageSender,RabbitMQAuthMessageSender>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -1,5 +1,6 @@
 ﻿using foodBazar.MessageBus;
 using FoodBazar.Services.AuthApi.Models.Dto;
+using FoodBazar.Services.AuthApi.RabittMQSender;
 using FoodBazar.Services.AuthApi.Services.IService;
 using FoodBazar.Services.CouponApi.Model.Dto;
 using Microsoft.AspNetCore.Http;
@@ -14,9 +15,9 @@ namespace FoodBazar.Services.AuthApi.Controllers
 	{
 		public readonly IAuthService _authService;
 		protected ResponseDto _responseDto;
-		private IMessageBus _messageBus;
+		private IRabbitMQAuthMessageSender _messageBus;
 		private IConfiguration _config;
-		public AuthApiController(IAuthService authService , IMessageBus messageBus, IConfiguration config)
+		public AuthApiController(IAuthService authService, IRabbitMQAuthMessageSender messageBus, IConfiguration config)
 		{
 			this._authService = authService;
 			_responseDto = new();
@@ -36,8 +37,8 @@ namespace FoodBazar.Services.AuthApi.Controllers
 
 			}
 
-			await _messageBus.PublishMessage(_config.GetValue<string>(
-				"topicandQueueNames:EmailRegistration"), registration.Email);
+			_messageBus.PublishMessage(_config.GetValue<string>(
+			   "topicandQueueNames:EmailRegistration"), registration.Email);
 
 			return Ok(_responseDto);
 		}
@@ -64,8 +65,8 @@ namespace FoodBazar.Services.AuthApi.Controllers
 		[HttpPost("ResetPassword")]
 		public async Task<IActionResult> ResetPassword([FromBody] LoginRequestDto loginRequest)
 		{
-			var loginResponse = await _authService.ResetPassword(loginRequest.UserName,loginRequest.Password);
-			
+			var loginResponse = await _authService.ResetPassword(loginRequest.UserName, loginRequest.Password);
+
 			if (loginResponse == false)
 			{
 				_responseDto.Message = "The UserName and Password can not reset";
