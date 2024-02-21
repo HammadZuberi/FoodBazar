@@ -16,13 +16,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 });
 
-var optionBuilder= new DbContextOptionsBuilder<AppDbContext>();
+var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
 optionBuilder.UseSqlServer(SQLConnection);
 builder.Services.AddSingleton(new EmailService(optionBuilder.Options));
 
 builder.Services.AddControllers();
 builder.Services.AddSingleton
 	<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
+builder.Services.AddHostedService<RabbitMQConsumer>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

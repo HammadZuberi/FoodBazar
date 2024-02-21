@@ -15,10 +15,10 @@ namespace foodBazar.Services.EmailApi.Messaging
 		private readonly string OrderCreated_Topic;
 		private readonly string OrderCreated_subscription;
 		private readonly IConfiguration _configuration;
+		private EmailService _emailService;
 		private ServiceBusProcessor _emailOrderProcessor;
 		private ServiceBusProcessor _emailCartProcessor;
 		private ServiceBusProcessor _emailregisterProcessor;
-		private EmailService _emailService;
 		public AzureServiceBusConsumer(IConfiguration configuration, EmailService emailService)
 		{
 			_emailService=emailService;
