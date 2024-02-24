@@ -3,32 +3,38 @@ using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System.Text;
 
-namespace FoodBazar.Services.AuthApi.RabbitMQSender
+namespace FoodBazar.RabbitMQSender
 {
-	public class RabbitMQAuthMessageSender : IRabbitMQAuthMessageSender
+	public class RabbitMQMessageSender : IRabbitMQMessageSender
 	{
 		private readonly string _hostName;
 		private readonly string _userName;
 		private readonly string _password;
 
 		private IConnection _connection;
-		public RabbitMQAuthMessageSender()
+		public RabbitMQMessageSender()
 		{
 			_hostName = "localhost";
 			_userName = "guest";
 			_password = "guest";
 		}
-		public void PublishMessage(string queueName, object message)
+		public void PublishMessage(string queueexchangeName, object message, bool isExchange = false)
 		{
 			if (ConnectionExists())
 			{
 				using var channel = _connection.CreateModel();
-				channel.QueueDeclare(queueName, false, false, false, null);
+				if (isExchange)
+					channel.ExchangeDeclare(queueexchangeName, ExchangeType.Fanout, durable: false);
+				else
+					channel.QueueDeclare(queueexchangeName, false, false, false, null);
 
 				var json = JsonConvert.SerializeObject(message);
 				var body = Encoding.UTF8.GetBytes(json);
 
-				channel.BasicPublish(exchange: "", routingKey: queueName, null, body: body);
+				if (isExchange)
+					channel.BasicPublish(exchange: queueexchangeName, "", null, body: body);
+				else
+					channel.BasicPublish(exchange: "", routingKey: queueexchangeName, null, body: body);
 
 			}
 

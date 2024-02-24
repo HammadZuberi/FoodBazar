@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\foodBazar.MessageBus\foodBazar.MessageBus.csproj" />
+    <ProjectReference Include="..\FoodBazarRabbitMQ\FoodBazarRabbitMQ.csproj" />
   </ItemGroup>
 
   <ItemGroup>

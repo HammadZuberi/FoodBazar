@@ -172,7 +172,11 @@ namespace FoodBazar.Web.Controllers
 
 			if (response.IsSuccess && response != null)
 			{
+
 				CartDto cartDto = UtilityHelper.DeserializeObject<CartDto>(response.Result);
+
+				var email = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Email).FirstOrDefault()?.Value;
+				cartDto.CartHeader.Email = email;
 				return cartDto;
 			}
 			return new CartDto();
@@ -182,9 +186,6 @@ namespace FoodBazar.Web.Controllers
 		public async Task<IActionResult> EmailCart(CartDto cartDto)
 		{
 			CartDto cart = await LoadCartBasedonUser();
-
-			var email = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Email).FirstOrDefault()?.Value;
-
 
 			ResponseDto? response = await _service.EmailCart(cart);
 

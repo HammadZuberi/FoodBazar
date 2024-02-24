@@ -1,4 +1,6 @@
 using foodBazar.MessageBus;
+using FoodBazar.RabbitMQSender;
+using FoodBazar.Services.AuthApi.RabittMQSender;
 using FoodBazar.Services.OrderApi.Data;
 using FoodBazar.Services.OrderApi.Extensions;
 using FoodBazar.Services.OrderApi.Service;
@@ -18,7 +20,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.AddSwaggerwithAuth();
 
 builder.Services.AddScoped<IProductService, FoodBazar.Services.OrderApi.Service.ProductService>();
-builder.Services.AddScoped<IMessageBus,MessageBus>();
+builder.Services.AddScoped<IRabbitMQMessageSender,RabbitMQMessageSender>();
+//builder.Services.AddScoped<IMessageBus,MessageBus>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ApiAuthenticationHttpClientHandler>();

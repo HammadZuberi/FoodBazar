@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using foodBazar.MessageBus;
+using FoodBazar.Services.AuthApi.RabittMQSender;
 using FoodBazar.Services.OrderApi.Data;
 using FoodBazar.Services.OrderApi.Models;
 using FoodBazar.Services.OrderApi.Models.Dto;
@@ -25,10 +26,11 @@ namespace FoodBazar.Services.OrderApi.Controllers
 		private readonly AppDbContext _dbContext;
 		private IProductService _productService;
 		private readonly IConfiguration _configuration;
-		private readonly IMessageBus _messageBus;
+		//private readonly IMessageBus _messageBus;
+		private readonly IRabbitMQMessageSender _messageBus;
 
 		public OrderApiController(AppDbContext dbContext, IMapper mapper
-			, IProductService productService, IConfiguration configuration, IMessageBus messageBus)
+			, IProductService productService, IConfiguration configuration, IRabbitMQMessageSender messageBus)
 		{
 			_dbContext = dbContext;
 			_mapper = mapper;
@@ -244,7 +246,7 @@ namespace FoodBazar.Services.OrderApi.Controllers
 					//sending to ime
 					string topicname = _configuration.GetValue<string>("topicandQueueNames:OrderCreatedTopic");
 
-					_messageBus.PublishMessage(topicname, rewards);
+					_messageBus.PublishMessage(topicname, rewards, true);
 
 					_response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
 				}

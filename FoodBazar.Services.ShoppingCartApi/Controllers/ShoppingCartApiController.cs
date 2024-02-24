@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using foodBazar.MessageBus;
+using FoodBazar.Services.AuthApi.RabittMQSender;
 using FoodBazar.Services.ShoppingCartApi.Data;
 using FoodBazar.Services.ShoppingCartApi.Model.Dto;
 using FoodBazar.Services.ShoppingCartApi.Models;
@@ -20,7 +21,8 @@ namespace FoodBazar.Services.ShoppingCartApi.Controllers
 	public class ShoppingCartApiController : ControllerBase
 	{
 		private readonly AppDbContext _db;
-		private readonly IMessageBus _messageBus;
+		//private readonly IMessageBus _messageBus;
+		private readonly IRabbitMQMessageSender _messageBus;
 		private IMapper _mapper;
 		private ResponseDto _responseDto;
 		private IConfiguration _config;
@@ -28,7 +30,7 @@ namespace FoodBazar.Services.ShoppingCartApi.Controllers
 		private ICouponService _couponService;
 
 		public ShoppingCartApiController(IMapper apper, AppDbContext dbContext,
-			IProductService productService, ICouponService couponService, IMessageBus messageBus
+			IProductService productService, ICouponService couponService, IRabbitMQMessageSender messageBus
 			, IConfiguration config)
 
 		{
@@ -265,8 +267,8 @@ namespace FoodBazar.Services.ShoppingCartApi.Controllers
 		{
 			try
 			{
-				await _messageBus.PublishMessage(_config.GetValue<string>(
-					"topicandQueueNames:EmailShoppingCart"), cartDto);
+				_messageBus.PublishMessage(_config.GetValue<string>(
+				   "topicandQueueNames:EmailShoppingCart"), cartDto);
 
 				_responseDto.Result = true;
 			}

@@ -25,7 +25,7 @@ namespace foodBazar.Services.EmailApi.Messaging
 
 			var factory = new ConnectionFactory
 			{
-				HostName = "loaclhost",
+				HostName = "localhost",
 				UserName = "guest",
 				Password = "guest"
 			};

@@ -21,9 +21,10 @@ optionBuilder.UseSqlServer(SQLConnection);
 builder.Services.AddSingleton(new EmailService(optionBuilder.Options));
 
 builder.Services.AddControllers();
-builder.Services.AddSingleton
-	<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
+//builder.Services.AddSingleton	<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
 builder.Services.AddHostedService<RabbitMQConsumer>();
+builder.Services.AddHostedService<RMQEmailConsumer>();
+builder.Services.AddHostedService<RMQOrderConsumer>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -44,7 +45,7 @@ app.MapControllers();
 
 DBMigrations();
 //up and running when app starts
-app.UseAzureServiceBusCoinsumer();
+//app.UseAzureServiceBusCoinsumer();
 app.Run();
 
 
